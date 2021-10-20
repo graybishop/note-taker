@@ -24,6 +24,10 @@ const readDataBase = async () => {
     return json;
 };
 
+/**
+ * Given an object, the function writes the string to the database.
+ * @param {object} newDataBase 
+ */
 const writeDataBase = (newDataBase) => {
     let dataBaseString = JSON.stringify(newDataBase, null, '    ');
     fs.writeFile('db/db.json', dataBaseString, (err) => {
@@ -35,7 +39,7 @@ const writeDataBase = (newDataBase) => {
  * GET responds with the JSON of the db
  */
 router.get('/notes', async (req, res) => {
-    let data = await readDataBase();
+    const data = await readDataBase();
     res.json(data);
 });
 
@@ -44,11 +48,11 @@ router.get('/notes', async (req, res) => {
  */
 router.post('/notes', async (req, res) => {
     //bind JSON from request
-    let newNote = req.body;
+    const newNote = req.body;
     //add ID to JSON
     newNote.id = UUIDv4();
     //Read database file in, then add new object to it
-    let dataBase = await readDataBase();
+    const dataBase = await readDataBase();
     dataBase.push(newNote);
     //Rewrite Database file to disk
     writeDataBase(dataBase)
@@ -56,9 +60,12 @@ router.post('/notes', async (req, res) => {
     res.json(dataBase);
 });
 
-router.delete('/notes/:id', (req, res) => {
+router.delete('/notes/:id', async (req, res) => {
     //DELETE /api/notes/:id should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
-    res.send('This is a DELETE request for notes for ${}');
+    const dataBase = await readDataBase();
+    const filteredDB = dataBase.filter(({id}) => id != req.params.id)
+    writeDataBase(filteredDB)
+    res.send(`${req.params.id} deleted`);
 });
 
 //endpoint for mistaken requests
