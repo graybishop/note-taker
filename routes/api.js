@@ -55,7 +55,7 @@ router.post('/notes', async (req, res) => {
     const dataBase = await readDataBase();
     dataBase.push(newNote);
     //Rewrite Database file to disk
-    writeDataBase(dataBase)
+    writeDataBase(dataBase);
     //respond with new database JSON
     res.json(dataBase);
 });
@@ -66,8 +66,8 @@ router.post('/notes', async (req, res) => {
 router.delete('/notes/:id', async (req, res) => {
     const dataBase = await readDataBase();
     //filters out given ID
-    const filteredDB = dataBase.filter(({id}) => id != req.params.id)
-    writeDataBase(filteredDB)
+    dataBase.splice(dataBase.findIndex(({ id }) => id == req.params.id), 1);
+    writeDataBase(dataBase);
     res.send(`${req.params.id} deleted`);
 });
 
