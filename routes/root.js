@@ -1,14 +1,19 @@
 import express from 'express'
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-let router = express.Router()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const publicFolderRootObj = {root: path.join(__dirname, '../public')}
 
-router.use(express.static('../public'))
+const router = express.Router()
 
-router.get('/', (req, res)=>{
-    res.sendFile('../public/index.html')
-})
-router.get('/notes', (req, res)=>{
-    res.send('Notes HTML Goes Here')
-})
+router.get('/', function(req, res){
+    res.sendFile('index.html', publicFolderRootObj);
+  }); 
+
+router.get('/notes', function(req, res){
+    res.sendFile('notes.html', publicFolderRootObj);
+  }); 
 
 export default router
