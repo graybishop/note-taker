@@ -1,35 +1,68 @@
-import express from 'express'
-import fs from 'fs/promises'
+import express from 'express';
+import fs from 'fs/promises';
+import { v4 as UUIDv4 } from 'uuid';
 
 //router for /api requests, responses are typically restful
-const router = express.Router()
+const router = express.Router();
 
-router.get('/notes', async (req, res)=>{
-    let json
+/**
+ * Reads local database file, parses it, and returns it as an object
+ * @async
+ * @returns { Promise<object[]> } database object
+ */
+const readDataBase = async () => {
+    let json;
     try {
-        json = await fs.readFile('db/db.json',{ encoding: 'utf8'} , (err, data)=>{
-            err? console.error(err) : null
-            return data
-        })
-        json = JSON.parse(json)
+        json = await fs.readFile('db/db.json', { encoding: 'utf8' }, (err, data) => {
+            err ? console.error(err) : null;
+            return data;
+        });
+        json = JSON.parse(json);
     } catch (error) {
-        console.error(error)
+        console.error('Retrieving DB failed', error);
     }
-    res.json(json)
-})
+    return json;
+};
 
-router.post('/notes', (req, res)=>{
-    //TODO: POST /api/notes should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client. You'll need to find a way to give each note a unique id when it's saved (look into npm packages that could do this for you)
-    res.send('This is a POST request for notes')
-})
+const writeDataBase = (newDataBase) => {
+    let dataBaseString = JSON.stringify(newDataBase);
+    fs.writeFile('db/db.json', dataBaseString, (err) => {
+        err ? console.error(err) : null;
+    });
+};
 
-router.delete('/notes', (req, res)=>{
+/**
+ * GET responds with the JSON of the db
+ */
+router.get('/notes', async (req, res) => {
+    let data = await readDataBase();
+    res.json(data);
+});
+
+/**
+ * Adds req JSON to DB, after adding new ID property, then responds with new DB
+ */
+router.post('/notes', async (req, res) => {
+    //bind JSON from request
+    let newNote = req.body;
+    //add ID to JSON
+    newNote.ID = UUIDv4();
+    //Read database file in, then add new object to it
+    let dataBase = await readDataBase();
+    dataBase.push(newNote);
+    //Rewrite Database file to disk
+    writeDataBase(dataBase)
+    //respond with new database JSON
+    res.json(dataBase);
+});
+
+router.delete('/notes', (req, res) => {
     //DELETE /api/notes/:id should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
-    res.send('This is a DELETE request for notes')
-})
+    res.send('This is a DELETE request for notes');
+});
 
 //endpoint for mistaken requests
-router.all('/', (req,res)=>{
-    res.status(400).send(`You need to add '/notes' to your request`)
-})
-export default router
+router.all('/', (req, res) => {
+    res.status(400).send(`You need to add '/notes' to your request`);
+});
+export default router;

@@ -8,6 +8,7 @@ const app = express()
 const port = process.env.PORT || 3001
 
 app.use(morgan('dev'))
+app.use(express.json())
 app.use(express.static('./public', {index: false}))
 app.use('/', root)
 app.use('/api', api)
