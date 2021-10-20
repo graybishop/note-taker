@@ -6,6 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicFolderRootObj = {root: path.join(__dirname, '../public')}
 
+//Router for root requests, responses are typically html files
 const router = express.Router()
 
 router.get('/', function(req, res){

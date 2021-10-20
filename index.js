@@ -3,7 +3,8 @@ import root from './routes/root.js'
 import api from './routes/api.js'
 
 const app = express()
-const port = 3001
+//TODO: Deploy to Heroku
+const port = process.env.PORT || 3001
 
 app.use(express.static('./public', {index: false}))
 app.use('/', root)
