@@ -25,7 +25,7 @@ const readDataBase = async () => {
 };
 
 const writeDataBase = (newDataBase) => {
-    let dataBaseString = JSON.stringify(newDataBase);
+    let dataBaseString = JSON.stringify(newDataBase, null, '    ');
     fs.writeFile('db/db.json', dataBaseString, (err) => {
         err ? console.error(err) : null;
     });
@@ -46,7 +46,7 @@ router.post('/notes', async (req, res) => {
     //bind JSON from request
     let newNote = req.body;
     //add ID to JSON
-    newNote.ID = UUIDv4();
+    newNote.id = UUIDv4();
     //Read database file in, then add new object to it
     let dataBase = await readDataBase();
     dataBase.push(newNote);
@@ -56,9 +56,9 @@ router.post('/notes', async (req, res) => {
     res.json(dataBase);
 });
 
-router.delete('/notes', (req, res) => {
+router.delete('/notes/:id', (req, res) => {
     //DELETE /api/notes/:id should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
-    res.send('This is a DELETE request for notes');
+    res.send('This is a DELETE request for notes for ${}');
 });
 
 //endpoint for mistaken requests
