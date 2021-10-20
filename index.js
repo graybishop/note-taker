@@ -14,5 +14,5 @@ app.use('/', root)
 app.use('/api', api)
 
 app.listen(port, ()=>{
-    console.log(`app listening at http://localhost:${port} 🥇`)
+    console.log(`app listening at http://localhost:${port} 🦸‍♀️`)
 })

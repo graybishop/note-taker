@@ -1,11 +1,12 @@
 [
     {
-        "title": "Test Title",
-        "text": "Test text"
+        "title": "This is a Test Note",
+        "text": "Howdy",
+        "id": "18ba5312-07b8-41d3-a182-93a657539fb2"
     },
     {
-        "title": "Delete Test",
-        "text": "Delete Me!",
-        "id": "e55d270f-f2da-40d7-a3ea-eeb52538c1d5"
+        "title": "This is a second test note",
+        "text": "Howdy, again!",
+        "id": "c862c0f5-be4b-4115-810a-b9238ea9479e"
     }
 ]
