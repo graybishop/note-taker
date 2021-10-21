@@ -13,9 +13,9 @@ Just visit the deployment to start saving notes!
 
 ## Screenshots
 
-![homepage of the app](assets/Note-Taker%20homepage.png)
+![homepage of the app](assets/Note-Taker-homepage.png)
 
-![notes page of the app](assets/Note-Taker%20notes%20page.png)
+![notes page of the app](assets/Note-Taker-notes-page.png)
 
 ## Features
 
